@@ -1,0 +1,39 @@
+#include <signal.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int
+main(void)
+{
+  pid_t pid;
+  char input[1024];
+  printf("Enter programs to run.\n");
+  
+  while(1) {
+    printf("> ");
+    fflush(stdout);
+
+    if (fgets(input, 1024, stdin) == NULL){
+      break;
+    }
+
+    input[strcspn(input, "\n")} = '\0';
+    pid = fork();
+    switch (pid) {
+      case -1:
+        perror("fork");
+        exit(1);
+      case 0:
+        execl(input, input, (char *)NULL);
+        perror("Exec failure");
+        exit(1);
+      defult:
+        waitpad(pid, NULL, 0);
+    }
+  }
+  return 0;
+}
+
